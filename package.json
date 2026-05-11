@@ -1,6 +1,6 @@
 {
   "name": "@mangsriso/oracle-codex-plugin",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "private": true,
   "type": "module",
   "description": "Use Codex from Claude Code to review code or delegate tasks.",

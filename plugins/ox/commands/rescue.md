@@ -1,11 +1,11 @@
 ---
 description: Delegate investigation, an explicit fix request, or follow-up rescue work to the Codex rescue subagent
 argument-hint: "[--background|--wait] [--resume|--fresh] [--model <model|spark>] [--effort <none|minimal|low|medium|high|xhigh>] [what Codex should investigate, solve, or continue]"
-context: fork
-allowed-tools: Bash(node:*), AskUserQuestion
+allowed-tools: Bash(node:*), AskUserQuestion, Agent
 ---
 
-Route this request to the `ox:ox-rescue` subagent.
+Invoke the `ox:ox-rescue` subagent via the `Agent` tool (`subagent_type: "ox:ox-rescue"`), forwarding the raw user request as the prompt.
+`ox:ox-rescue` is a subagent, not a skill — do not call `Skill(ox:ox-rescue)` (no such skill) or `Skill(ox:rescue)` (that re-enters this command and hangs the session). The command runs inline so the `Agent` tool stays in scope; forked general-purpose subagents do not expose it.
 The final user-visible response must be Codex's output verbatim.
 
 Raw user request:
