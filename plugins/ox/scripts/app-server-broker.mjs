@@ -233,15 +233,18 @@ async function main() {
     });
   });
 
-  process.on("SIGTERM", async () => {
-    await shutdown(server);
-    process.exit(0);
-  });
+  function exitOnSignal() {
+    // shutdown() awaits appClient.close() and server.close(), both of which
+    // can wait forever on a peer that never closes its socket — leaving the
+    // daemon unkillable by SIGTERM. The unref'd timer guarantees exit.
+    setTimeout(() => process.exit(0), 2000).unref();
+    shutdown(server)
+      .catch(() => {})
+      .then(() => process.exit(0));
+  }
 
-  process.on("SIGINT", async () => {
-    await shutdown(server);
-    process.exit(0);
-  });
+  process.on("SIGTERM", exitOnSignal);
+  process.on("SIGINT", exitOnSignal);
 
   server.listen(listenTarget.path);
 }
