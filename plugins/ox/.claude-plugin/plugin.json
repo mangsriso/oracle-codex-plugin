@@ -1,6 +1,8 @@
 {
   "name": "ox",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Oracle-enhanced Codex -- code review with institutional memory.",
-  "author": { "name": "mangsriso" }
+  "author": {
+    "name": "mangsriso"
+  }
 }

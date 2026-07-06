@@ -1,15 +1,21 @@
 {
   "name": "oracle-codex",
-  "owner": { "name": "mangsriso" },
+  "owner": {
+    "name": "mangsriso"
+  },
   "metadata": {
     "description": "Oracle-enhanced Codex plugin for Claude Code.",
-    "version": "1.0.4"
+    "version": "1.0.5"
   },
-  "plugins": [{
-    "name": "ox",
-    "description": "Oracle-enhanced Codex -- code review with institutional memory.",
-    "version": "1.0.4",
-    "author": { "name": "mangsriso" },
-    "source": "./plugins/ox"
-  }]
+  "plugins": [
+    {
+      "name": "ox",
+      "description": "Oracle-enhanced Codex -- code review with institutional memory.",
+      "version": "1.0.5",
+      "author": {
+        "name": "mangsriso"
+      },
+      "source": "./plugins/ox"
+    }
+  ]
 }
