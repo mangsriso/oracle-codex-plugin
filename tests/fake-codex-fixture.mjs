@@ -361,6 +361,14 @@ rl.on("line", (line) => {
           send({ method: "externalAgentConfig/import/completed", params: {} });
           break;
         }
+        if (BEHAVIOR === "external-import-corrupt-ledger") {
+          const ledgerPath = importLedgerPath();
+          fs.mkdirSync(path.dirname(ledgerPath), { recursive: true });
+          fs.writeFileSync(ledgerPath, "NOT JSON {{{");
+          send({ id: message.id, result: {} });
+          send({ method: "externalAgentConfig/import/completed", params: {} });
+          break;
+        }
         const sessions = (message.params.migrationItems || [])
           .flatMap((item) => item.details && Array.isArray(item.details.sessions) ? item.details.sessions : []);
         const session = sessions[0];

@@ -303,6 +303,35 @@ test("transfer fails visibly when native import completes without a ledger recor
   assert.match(result.stderr, /did not record an imported thread/);
 });
 
+test("transfer surfaces an actionable error when the import ledger is corrupt", () => {
+  const home = makeTempDir();
+  const repo = path.join(home, "repo");
+  const binDir = makeTempDir();
+  const projectDir = path.join(home, ".claude", "projects", "-repo");
+  const sourcePath = path.join(projectDir, "session.jsonl");
+  fs.mkdirSync(repo, { recursive: true });
+  fs.mkdirSync(projectDir, { recursive: true });
+  installFakeCodex(binDir, "external-import-corrupt-ledger");
+  initGitRepo(repo);
+  fs.writeFileSync(
+    sourcePath,
+    `${JSON.stringify({ type: "user", cwd: repo, message: { role: "user", content: "Do not lose this request." } })}\n`,
+    "utf8"
+  );
+
+  const result = run("node", [SCRIPT, "transfer", "--source", sourcePath], {
+    cwd: repo,
+    env: {
+      ...buildEnv(binDir),
+      HOME: home,
+      CODEX_HOME: path.join(home, ".codex")
+    }
+  });
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /unreadable/);
+});
+
 test("transfer rejects sources outside the Claude projects directory", () => {
   const home = makeTempDir();
   const repo = path.join(home, "repo");

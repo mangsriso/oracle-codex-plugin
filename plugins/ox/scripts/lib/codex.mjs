@@ -663,7 +663,15 @@ function importedThreadIdForSource(sourcePath) {
   if (!fs.existsSync(ledgerPath)) {
     return null;
   }
-  const ledger = readJsonFile(ledgerPath);
+  let ledger;
+  try {
+    ledger = readJsonFile(ledgerPath);
+  } catch (error) {
+    throw new Error(
+      `The Codex import ledger at ${ledgerPath} is unreadable (${error instanceof Error ? error.message : String(error)}). The session may have imported successfully — check the Codex app-server logs, or repair/remove the ledger file and retry.`,
+      { cause: error }
+    );
+  }
   const canonicalSource = fs.realpathSync(sourcePath);
   const contentSha256 = sourceContentSha256(canonicalSource);
   const records = Array.isArray(ledger?.records) ? ledger.records : [];
